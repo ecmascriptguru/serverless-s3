@@ -1,0 +1,40 @@
+# NOTE: update this with your service name
+service: serverless-s3
+
+plugins:
+  - serverless-python-requirements
+
+provider:
+  name: aws
+  runtime: python3.6
+  stage: dev
+  region: us-east-1
+  environment: ${file(env.yml):${self:provider.stage}}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+        - s3:DeleteObject
+        - s3:PutObject
+      Resource:
+        - "Fn::GetAtt": [ IncomingBucket, Arn ]
+
+functions:
+  demo:
+    handler: src/endpoints/s3.index
+    events:
+      - http:
+          path: list
+          method: get
+          cors: true
+      - s3:
+          bucket: ${self:provider.environment.INCOMING_BUCKET_NAME}
+          event: s3:ObjectCreated:*
+          existing: true
+      # - sns:
+      #     topicName: aggregate
+      #     displayName: Data aggregation pipeline
+
+resources:
+  - ${file(src/resources/s3-buckets.yml)}
+  # - ${file(src/resources/sns-topic.yml)}

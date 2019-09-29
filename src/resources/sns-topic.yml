@@ -1,0 +1,11 @@
+Resources:
+  SNSTopic:
+    Type: AWS::S3::SNS
+    Properties:
+      TopicName: ${self:provider.environment.TOPIC_NAME}
+
+# Print out the name of the bucket that is created
+Outputs:
+  SNSTopicName:
+    Value:
+      Ref: TopicName
