@@ -13,11 +13,25 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - s3:GetObject
-        - s3:DeleteObject
-        - s3:PutObject
+        - s3:ListBucket
       Resource:
         - "Fn::GetAtt": [ IncomingBucket, Arn ]
+        - "Fn::GetAtt": [ ProcessedBucket, Arn ]
+
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource:
+        - Fn::Join:
+          - ''
+          -
+            - "Fn::GetAtt": [ IncomingBucket, Arn ]
+            - "/*"
+        - Fn::Join:
+          - ''
+          -
+            - "Fn::GetAtt": [ ProcessedBucket, Arn ]
+            - "/*"
 
 functions:
   demo:

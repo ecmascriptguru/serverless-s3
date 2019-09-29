@@ -18,9 +18,30 @@ Resources:
               - DELETE
               - HEAD
             MaxAge: 3000
+  ProcessedBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: ${self:provider.environment.PROCESSED_BUCKET_NAME}
+      CorsConfiguration:
+        CorsRules:
+          -
+            AllowedOrigins:
+              - '*'
+            AllowedHeaders:
+              - '*'
+            AllowedMethods:
+              - GET
+              - PUT
+              - POST
+              - DELETE
+              - HEAD
+            MaxAge: 3000
 
 # Print out the name of the bucket that is created
 Outputs:
   IncomingBucketName:
     Value:
       Ref: IncomingBucket
+  ProcessedBucketName:
+    Value:
+      Ref: ProcessedBucket
