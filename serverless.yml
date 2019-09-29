@@ -1,4 +1,3 @@
-# NOTE: update this with your service name
 service: serverless-s3
 
 plugins:
@@ -45,10 +44,7 @@ functions:
           bucket: ${self:provider.environment.INCOMING_BUCKET_NAME}
           event: s3:ObjectCreated:*
           existing: true
-      # - sns:
-      #     topicName: aggregate
-      #     displayName: Data aggregation pipeline
 
 resources:
   - ${file(src/resources/s3-buckets.yml)}
-  # - ${file(src/resources/sns-topic.yml)}
+  - ${file(src/resources/sns-topics.yml)}
